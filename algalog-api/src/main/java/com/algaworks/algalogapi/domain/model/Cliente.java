@@ -14,6 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 // Identifica a chava primária (identifier)
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,9 +35,17 @@ public class Cliente {
   private Long id;
   // Identifica o nome da coluna da tabela a qual essa propriedade se refere
   // Se o nome da propriedade e o nome da coluna são iguais, pode ser omitido
+  @NotBlank
+  @Size(max = 60)
   private String nome;
+
+	@NotBlank
+	@Email
+	@Size(max = 255)
   private String email;
 
   @Column(name = "fone")
+	@NotBlank
+	@Size(max = 20)
   private String telefone;
 }

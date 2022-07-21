@@ -1,30 +1,30 @@
 package com.algaworks.algalogapi.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algalogapi.domain.model.Cliente;
+import com.algaworks.algalogapi.domain.repository.ClienteRepository;
 
+import lombok.AllArgsConstructor;
+
+// Especifica que esta classe é um controlador de uma API rest
 @RestController
+@AllArgsConstructor // Gera um construtor com todas as propriedades como parametros, melhor para testar
 public class ClientesController {
-	
-	@GetMapping("/clientes")
-	public List<Cliente> listar(){
-		var cliente1 = new Cliente();
-		cliente1.setId(1L);
-		cliente1.setNome("João");
-		cliente1.setTelefone("99 99999-9999");
-		cliente1.setEmail("joaodascouves@algaworks.com");
 
-		var cliente2 = new Cliente();
-		cliente2.setId(2L);
-		cliente2.setNome("Maria");
-		cliente2.setTelefone("99 99999-9998");
-		cliente2.setEmail("mariadasilva@algaworks.com");
-		
-		return Arrays.asList(cliente1,cliente2);
-	}
+	// Com essa anotação o spring data jpa gera automaticamente uma classe que implementa 
+	// essa interface. Porém isso dificulta testes
+	// @Autowired
+	// private ClienteRepository clienteRepository;
+	private ClienteRepository clienteRepository;
+
+	// Implementa um método que busca todos os clientes
+  @GetMapping("/clientes")
+  public List<Cliente> listar() {
+    return clienteRepository.findAll();
+  }
+
 }

@@ -2,6 +2,7 @@ package com.algaworks.algalogapi.controller;
 
 import com.algaworks.algalogapi.domain.model.Cliente;
 import com.algaworks.algalogapi.domain.repository.ClienteRepository;
+import com.algaworks.algalogapi.domain.service.CatalogoClienteService;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 // Especifica que esta classe é um controlador de uma API rest
 @RestController
 @AllArgsConstructor // Gera um construtor com todas as propriedades como parametros, melhor para
-                    // testar
+// testar
 @RequestMapping("/clientes") // diz que essa classe implementa subrotas da rota /clientes
 public class ClientesController {
 
@@ -29,6 +30,7 @@ public class ClientesController {
   // @Autowired
   // private ClienteRepository clienteRepository;
   private ClienteRepository clienteRepository;
+  private CatalogoClienteService catalogoClienteService;
 
   // Implementa um método que busca todos os clientes
   // Como esse getmapping não tem nenhuma subrota, ele é a rota index (/clientes/)
@@ -46,22 +48,13 @@ public class ClientesController {
         .findById(clienteId)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
-
-    // pode ser feito assim também
-    // 	if (cliente.isPresent()){
-    // 		return ResponseEntity.ok(cliente.get());
-    // 	}
-    //
-    // 	return ResponseEntity.notFound().build();
-    //
-    // }
   }
 
   @PostMapping // RequestBody transforma o corpo da requisição em um objeto
   @ResponseStatus(HttpStatus.CREATED) // Diz que essa requisição retorna 201
   public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
     // save(entidade) -> salva a entidade e retorna ela automaticamente
-    return clienteRepository.save(cliente);
+    return catalogoClienteService.salvar(cliente);
   }
 
   @PutMapping("/{clienteId}")
@@ -73,7 +66,7 @@ public class ClientesController {
 
     cliente.setId(clienteId);
     // Cuidado, se não setar o Id do cliente diretamente, esse código gera um novo cliente
-    cliente = clienteRepository.save(cliente);
+    cliente = catalogoClienteService.salvar(cliente);
     return ResponseEntity.ok(cliente);
   }
 
@@ -84,7 +77,7 @@ public class ClientesController {
       return ResponseEntity.notFound().build();
     }
 
-    clienteRepository.deleteById(clienteId);
+    catalogoClienteService.remover(clienteId);
     return ResponseEntity.noContent().build();
   }
 }

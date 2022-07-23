@@ -13,6 +13,12 @@ public class CatalogoClienteService {
 
   private ClienteRepository clienteRepository;
 
+	public Cliente buscarPorId(Long clienteId){
+		return clienteRepository.findById(clienteId)
+			.orElseThrow(()-> new DomainException("Cliente não encontrado"));
+
+	}
+
   @Transactional // Informa que isso deve ser executado em uma transação
   // Se algo der errado, a operação é parada
   public Cliente salvar(Cliente cliente) {

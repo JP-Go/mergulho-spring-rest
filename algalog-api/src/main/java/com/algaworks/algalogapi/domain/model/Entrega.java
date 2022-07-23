@@ -13,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
+import com.algaworks.algalogapi.domain.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -33,11 +36,14 @@ public class Entrega {
   private Long Id;
 
   @ManyToOne // Clientes podem ter múltiplas entregas
+	@ConvertGroup(from = Default.class,to = ValidationGroups.ClienteId.class)
 	@NotNull
 	@Valid
   private Cliente cliente;
 
   @Embedded // Introduz todos os dados do destinatário na tabela de entrega
+	@NotNull
+	@Valid
   private Destinatario destinatario;
 
 	@NotNull

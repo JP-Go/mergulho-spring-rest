@@ -16,7 +16,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.algaworks.algalogapi.domain.ValidationGroups;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +36,7 @@ public class Cliente {
   @EqualsAndHashCode.Include
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY) // Deixa que o banco cuida
+	@NotNull(groups = ValidationGroups.ClienteId.class)
   private Long id;
   // Identifica o nome da coluna da tabela a qual essa propriedade se refere
   // Se o nome da propriedade e o nome da coluna são iguais, pode ser omitido

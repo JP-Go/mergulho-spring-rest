@@ -1,9 +1,8 @@
 package com.algaworks.algalogapi.exception;
 
-import com.algaworks.algalogapi.domain.exception.DomainException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +14,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.algaworks.algalogapi.domain.exception.DomainException;
+import com.algaworks.algalogapi.domain.exception.EntidadeNaoEncontradaException;
+
+import lombok.AllArgsConstructor;
 
 // Informa ao expring que este é um componente que trata exceções
 // Para todos os controllers da aplicação
@@ -56,6 +60,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request) {
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
+    Problema problema = new Problema();
+    problema.setStatus(status.value());
+    problema.setDataHora(OffsetDateTime.now());
+    problema.setTitulo(ex.getMessage());
+
+    return super.handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+  }
+
+  @ExceptionHandler(EntidadeNaoEncontradaException.class)
+  public ResponseEntity<Object> handleEntidadeNaoEncontradaException(DomainException ex, WebRequest request) {
+
+    HttpStatus status = HttpStatus.NOT_FOUND;
     Problema problema = new Problema();
     problema.setStatus(status.value());
     problema.setDataHora(OffsetDateTime.now());

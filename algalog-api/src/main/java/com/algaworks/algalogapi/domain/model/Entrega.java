@@ -1,6 +1,8 @@
 package com.algaworks.algalogapi.domain.model;
 
 import com.algaworks.algalogapi.domain.ValidationGroups;
+import com.algaworks.algalogapi.domain.exception.DomainException;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public class Entrega {
   private Long Id;
 
   @ManyToOne // Clientes podem ter múltiplas entregas
-  @ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)
   private Cliente cliente;
 
   @Embedded // Introduz todos os dados do destinatário na tabela de entrega
@@ -62,4 +63,20 @@ public class Entrega {
 
     return ocorrencia;
   }
+
+	public void finalizar(){
+		if (naoPodeSerFinalizada()){
+			throw new DomainException("Entrega não pode ser finalizada");
+		}
+		setStatus(StatusEntrega.FINALIZADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+
+	public Boolean podeSerFinalizada(){
+		return getStatus().equals(StatusEntrega.PENDENTE);
+	}
+
+	public Boolean naoPodeSerFinalizada(){
+		return !getStatus().equals(StatusEntrega.PENDENTE);
+	}
 }

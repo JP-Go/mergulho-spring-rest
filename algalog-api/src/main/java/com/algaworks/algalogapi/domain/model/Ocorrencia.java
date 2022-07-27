@@ -17,8 +17,8 @@ import lombok.Setter;
 public class Ocorrencia {
 
   @EqualsAndHashCode.Include
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
 	//Multiplas ocorrencias tem uma entrega

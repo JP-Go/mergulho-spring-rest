@@ -2,6 +2,6 @@ package com.algaworks.algalogapi.domain.model;
 
 public enum StatusEntrega {
 	
-    PENDENTE,FINALIZADAM,CANCELADA;
+    PENDENTE,FINALIZADA,CANCELADA;
 }
 
